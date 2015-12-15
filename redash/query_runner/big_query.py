@@ -95,6 +95,10 @@ class BigQuery(BaseQueryRunner):
                 'jsonKeyFile': {
                     "type": "string",
                     'title': 'JSON Key File'
+                },
+                'udfResourceUri': {
+                    "type": "string",
+                    'title': 'UDF Resource URI'
                 }
             },
             'required': ['jsonKeyFile', 'projectId'],
@@ -131,6 +135,10 @@ class BigQuery(BaseQueryRunner):
                 }
             }
         }
+
+        if 'udfResourceUri' in self.configuration:
+            uris = self.configuration['udfResourceUri'].split(',')
+            job_data['configuration']['query']['userDefinedFunctionResources'] = map(lambda uri: {'resourceUri': uri}, uris)
 
         logger.debug("BigQuery got query: %s", query)
 
